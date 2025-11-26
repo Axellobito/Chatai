@@ -113,7 +113,8 @@
 
   // Aquí vamos a llamar al Worker
   try {
-    const res = await fetch("https://rough-union-ccef.fcano237072-724.workers.dev/", {  // <-- cambia esto
+    const res = await fetch("https://rough-union-ccef.fcano237072-724.workers.dev"
+    ", {  // <-- cambia esto
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: msg })
