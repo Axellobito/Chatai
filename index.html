@@ -96,37 +96,26 @@
       chat.scrollTop = chat.scrollHeight;
     }
 
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       const msg = input.value.trim();
       if (!msg) return;
 
       addMessage(msg, "user");
       input.value = "";
 
-      // Mensaje temporal simulado (se reemplazará con IA real más adelante)
-      btn.addEventListener("click", async () => {
-  const msg = input.value.trim();
-  if (!msg) return;
+      try {
+        const res = await fetch("https://rough-union-ccef.fcano237072-724.workers.dev", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: msg })
+        });
 
-  addMessage(msg, "user");
-  input.value = "";
+        const data = await res.json();
+        addMessage(data.text, "bot");
 
-  // Aquí vamos a llamar al Worker
-  try {
-    const res = await fetch("https://rough-union-ccef.fcano237072-724.workers.dev"
-    ", {  // <-- cambia esto
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: msg })
-    });
-
-    const data = await res.json();
-    addMessage(data.text, "bot");
-
-  } catch (err) {
-    addMessage("(Error al conectar con la IA)", "bot");
-  }
-});
+      } catch (err) {
+        addMessage("(Error al conectar con la IA)", "bot");
+      }
     });
   </script>
 </body>
