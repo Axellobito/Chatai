@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat IA</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #4da3ff;
+      color: white;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background: white;
+      border: 1px solid #ddd;
+      color: #333;
+    }
+
+    #input-area {
+      display: flex;
+      padding: 10px;
+      background: #ffffff;
+      border-top: 1px solid #ddd;
+    }
+
+    #msg-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+
+    #send-btn {
+      margin-left: 10px;
+      padding: 10px 15px;
+      background: #4da3ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    #send-btn:hover {
+      background: #1d8bff;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container"></div>
+
+  <div id="input-area">
+    <input id="msg-input" type="text" placeholder="Escribe un mensaje..." />
+    <button id="send-btn">Enviar</button>
+  </div>
+
+  <script>
+    const chat = document.getElementById("chat-container");
+    const input = document.getElementById("msg-input");
+    const btn = document.getElementById("send-btn");
+
+    function addMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = "msg " + type;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    btn.addEventListener("click", () => {
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      addMessage(msg, "user");
+      input.value = "";
+
+      // Mensaje temporal simulado (se reemplazará con IA real más adelante)
+      btn.addEventListener("click", async () => {
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  addMessage(msg, "user");
+  input.value = "";
+
+  // Aquí vamos a llamar al Worker
+  try {
+    const res = await fetch("https://rough-union-ccef.fcano237072-724.workers.dev/", {  // <-- cambia esto
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: msg })
+    });
+
+    const data = await res.json();
+    addMessage(data.text, "bot");
+
+  } catch (err) {
+    addMessage("(Error al conectar con la IA)", "bot");
+  }
+});
+    });
+  </script>
+</body>
+</html>
